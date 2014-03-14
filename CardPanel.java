@@ -3,7 +3,10 @@
  * A card panel
  */
 
-import java.awt.Image;
+import javax.imageio.*;
+import java.awt.image.*;
+import java.io.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -19,6 +22,18 @@ public class CardPanel extends JPanel implements MouseListener {
 	private ArrayList <Card> cards;
 	private int capacity;
 	private Image topCard;
+
+	public Image getImage(String file) {
+		System.out.println(file);
+		BufferedImage result = null;
+		try {
+			result = ImageIO.read(getClass().getResourceAsStream(file));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
 	
 	/**
 	 * 
@@ -41,7 +56,9 @@ public class CardPanel extends JPanel implements MouseListener {
 			cards.add( c );
 			//System.out.println( cards.get( cards.size()-1 ).getCardName() );
 			//topCard.setText( cards.get( cards.size()-1 ).getCardName() );
-			// topCard = getImage( cards.get( cards.size()-1 ).getCardImage() );
+			topCard = getImage( cards.get( cards.size()-1 ).getCardImage() );
+			setPreferredSize(new Dimension(topCard.getWidth(null), topCard.getHeight(null)));
+			setMinimumSize(new Dimension(topCard.getWidth(null), topCard.getHeight(null)));
 			repaint();
 		}
 	}
@@ -71,6 +88,10 @@ public class CardPanel extends JPanel implements MouseListener {
 		else {
 			addCard( c );
 		}*/
+	}
+
+	public void paintComponent(Graphics g) {
+		g.drawImage(topCard, 0, 0, null);
 	}
 
 	/*don't need these, so they are empty*/
